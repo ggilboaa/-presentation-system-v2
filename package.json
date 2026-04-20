@@ -2,5 +2,8 @@
   "name": "presentation-system-v2",
   "version": "1.0.0",
   "type": "module",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.69.0"
+  }
 }

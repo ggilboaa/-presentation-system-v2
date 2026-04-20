@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/create-presentation.js": {
+      "maxDuration": 60,
+      "includeFiles": "{skills/**,config.md}"
+    },
+    "api/presentation.js": {
+      "includeFiles": "{skills/**,config.md}"
+    }
+  }
+}
