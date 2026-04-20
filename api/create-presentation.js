@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     const slug = slugifyTopic(built.topic) || "presentation";
 
     const presentationUrl = deployPublic && origin ? `${origin}/api/presentation?d=${d}` : null;
-    const pdfUrl = exportPdf && origin ? `${origin}/api/pdf?d=${d}` : null;
+    const pdfUrl = exportPdf && origin ? `${origin}/api/presentation?d=${d}&print=1` : null;
 
     return res.status(200).json({
       ok: true,
