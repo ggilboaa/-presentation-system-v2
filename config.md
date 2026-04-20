@@ -2,167 +2,243 @@
 
 ## Organization
 
-Name: נשרים – המרכז לטיפול באתגרי ההתבגרות  
-Phone: 053-766-1500  
-Email: office@nesharim.org.il  
-Address: רחוב יפו 206, ס-מ 1  
-Website: nesharim.org.il  
+Name: נשרים – המרכז לטיפול באתגרי ההתבגרות
+Phone: 053-766-1500
+Email: office@nesharim.org.il
+Address: רחוב יפו 206, ס-מ 1
+Website: nesharim.org.il
 
 ---
 
 ## Default Behavior
 
-Default audience: Parents of adolescents  
-Default purpose: Insight + practical takeaway  
-Default depth: Medium to deep  
-Default tone: Personal, engaging, clear  
+Default audience: Parents of adolescents
+Default purpose: Insight + practical takeaway
+Default depth: Medium to deep
+Default tone: Personal, engaging, clear
+Default language: Hebrew
+Default presentation theme: Blue
 Default length: Medium (10–15 slides)
 
 ---
 
-## Asset Strategy
+## Asset Paths
 
-All assets must be accessed via project-relative paths:
+All assets must use project-relative paths only.
 
-- /assets/fonts/
-- /assets/backgrounds/
+Backgrounds:
+- /assets/backgrounds/bg-full-blue.jpg
+- /assets/backgrounds/bg-frame-blue.jpg
+- /assets/backgrounds/bg-full-green.jpg
+- /assets/backgrounds/bg-frame-green.jpg
 
-Never use local absolute paths (e.g. /Users/...)
+Fonts:
+- /assets/fonts/paamon/
 
-When deployed:
-- Prefer public URLs if available
-- Ensure all assets are accessible in production
-
----
-
-## Color System
-
---navy: #0A1C2F  
---mint: #78DDB5  
---mint-light: #A6E5CC  
---coral: #E06768  
---mustard: #EBC13A  
---gray-light: #F4F4F4  
---white: #FFFFFF  
-
-### Color Rules
-
-- Primary text: navy  
-- White (#FFFFFF) ONLY inside blocks, never as full background  
-- Accent colors: mint / coral / mustard  
-- Maintain high contrast and readability  
+Never use local absolute paths like /Users/...
 
 ---
 
-## Typography System
+## Background Mapping
 
-Font: Paamon (fallback: Arial, sans-serif)
+Blue theme:
+- Opening: bg-full-blue
+- Content: bg-frame-blue
+- Transition: bg-full-blue
+- Closing: bg-full-blue
 
-### Hierarchy
+Green theme:
+- Opening: bg-full-green
+- Content: bg-frame-green
+- Transition: bg-full-green
+- Closing: bg-full-green
+
+Rules:
+- One theme per presentation only
+- If user specifies green → use green
+- If user specifies blue → use blue
+- If user does not specify → use blue
+- Opening / Closing / Transition always use full background
+- Content slides always use framed background
+
+---
+
+## Font System
+
+Primary font: Paamon
+Available weights:
+- Light
+- Regular
+- Medium
+- Bold
+- Black
+
+Fallback: Arial, sans-serif
+
+---
+
+## Typography
 
 H1:
-- Size: 52px–60px
+- Size: 56px
 - Weight: 700–800
-- Line-height: 1.05–1.15
+- Line-height: 1.1
 
 H2:
-- Size: 34px–40px
+- Size: 36px
 - Weight: 600–700
-- Line-height: 1.15–1.25
+- Line-height: 1.15
 
 Body:
-- Size: 22px–26px
+- Size: 24px
 - Weight: 400–500
-- Line-height: 1.4–1.6
+- Line-height: 1.5
 
 Bold text:
 - Size: 24px–30px
 - Weight: 600–700
 
 Footer:
-- Size: 11px–13px
+- Size: 12px
 - Weight: 400
+- Line-height: 1.2
+
+Alignment:
+- Center only
+
+Paragraph rule:
+- max-width: 800px
+- centered
+- short lines only
 
 ---
 
-## Layout System (Allowed Only)
+## Color System
 
-Layout A — Opening  
-Layout B — Center Block  
-Layout C — List  
-Layout D — Two Columns  
-Layout E — Grid  
+Primary text:
+- Navy: #0A1C2F
+
+Accent colors:
+- Mint: #78DDB5
+- Mint light: #A6E5CC
+- Coral: #E06768
+- Mustard: #EBC13A
+
+Support colors:
+- Light gray: #F4F4F4
+- White: #FFFFFF
+
+Rules:
+- Mint = primary highlight
+- Coral = tension / pain
+- Mustard = secondary highlight
+- Maximum one accent color per slide
+- White only inside blocks, never as full presentation background
+
+---
+
+## Layout System
+
+Allowed layouts only:
+- A = Opening / Transition / Closing
+- B = Single idea
+- C = List
+- D = Two columns
+- E = Grid
 
 No additional layouts allowed.
 
+Layout D rules:
+- 50/50 = comparison
+- 40/60 = emphasis
+
 ---
 
-## Slide Flow (Global Structure)
+## Presentation Flow
 
-1. Opening  
-2. Framing  
-3. Breakdown  
-4. Process  
-5. Application  
-6. Summary  
-7. Closing  
+1. Opening
+2. Framing
+3. Breakdown
+4. Process
+5. Application
+6. Summary
+7. Closing
+
+---
+
+## Opening Slide
+
+Rules:
+- Layout A only
+- Structure fixed
+- Only text changes
+- Theme background must be full
+
+Structure:
+- H1 = Title
+- H2 = Subtitle
+
+---
+
+## Closing Slide
+
+Rules:
+- Layout A only
+- Structure fixed
+- Text must not change
+- Theme background must be full
+
+Exact content:
+
+לייעוץ ומענה:
+
+053-766-1500
+
+nesharim.org.il
 
 ---
 
 ## Spacing System
 
-Small: 16px  
-Medium: 32px  
-Large: 56px  
+Small: 16px
+Medium: 32px
+Large: 56px
 
 Rules:
 - No arbitrary spacing values
-- Use only defined spacing scale
-- Prefer generous spacing over density
+- Prefer generous spacing
+- Keep rhythm identical across slides
 
 ---
 
-## Content Rules (Global)
+## Content Rules
 
-- Each slide must contain ONE clear idea  
-- If content is too dense → split into multiple slides  
-- Avoid overload  
-- Prefer clarity over completeness  
-
----
-
-## Animation Rules (Global)
-
-- Do not mix CSS classes with inline JS for transform/opacity  
-- Use JS initialization for animations  
-- Ensure proper reflow before animation  
-- Avoid setting transform/opacity on slide container in CSS  
+- One idea per slide
+- Max 6 bullets
+- No long paragraphs
+- Opening / framing may include short paragraph
+- If content is too dense, split into multiple slides
 
 ---
 
-## Viewport Rules (Global)
+## Responsive Rules
 
-- Each slide must fill viewport height (100vh / 100dvh)  
-- Use clamp() for responsive typography and spacing  
-- Apply max-height constraints to containers  
-- Images must respect max-height limits  
+Desktop:
+- Full presentation fidelity
 
----
-
-## Critical Constraints
-
-- No logo, footer, or decorative elements in HTML — only via background images  
-- No dependency on local machine paths  
-- Maintain strict separation:
-  - content (thinking)
-  - design (structure)
-  - build (HTML)
+Mobile:
+- Keep same design language
+- Stack columns vertically when needed
+- Keep backgrounds
+- Keep typography hierarchy
+- Do not redesign the system into a document
 
 ---
 
-## System Philosophy
+## Hard Constraints
 
-- Minimalism over decoration  
-- Structure over improvisation  
-- Clarity over complexity  
-- Flow over fragmentation  
+- Do not generate logo, footer, or frame in HTML if already embedded in background
+- Do not use local machine paths
+- Do not mix themes inside one presentation
+- Do not change closing slide text
+- Do not switch language unless user explicitly requests another language
