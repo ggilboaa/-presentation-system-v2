@@ -129,6 +129,27 @@
     .row { display: flex; gap: 8px; padding: 2px 0; }
     .row strong { min-width: 110px; color: var(--muted); font-weight: 500; }
     .row span { word-break: break-word; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .actions a {
+      flex: 1 1 140px;
+      text-align: center;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 12px;
+      text-decoration: none;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .actions a.primary { background: var(--navy); color: #fff; }
+    .actions a.secondary { background: var(--mint); color: var(--navy); }
     pre {
       white-space: pre-wrap;
       word-break: break-word;
@@ -202,6 +223,23 @@
       return '<div class="row"><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(value) + '</span></div>';
     }
 
+    function actions(data) {
+      const items = [];
+      if (data.presentationUrl) {
+        items.push(
+          '<a class="primary" href="' + escapeHtml(data.presentationUrl) +
+          '" target="_blank" rel="noopener">פתח מצגת</a>'
+        );
+      }
+      if (data.pdfUrl) {
+        items.push(
+          '<a class="secondary" href="' + escapeHtml(data.pdfUrl) +
+          '" target="_blank" rel="noopener">הורד PDF</a>'
+        );
+      }
+      return items.length ? '<div class="actions">' + items.join('') + '</div>' : '';
+    }
+
     function showResult(data) {
       output.innerHTML =
         '<div class="result">' +
@@ -209,8 +247,9 @@
           row('נושא', data.topic) +
           row('מספר שקפים', data.slideCount) +
           row('תובנה מרכזית', data.coreInsight) +
-          row('שם קובץ', data.output && data.output.htmlFileName) +
-          row('נתיב קובץ', data.output && data.output.htmlFilePath) +
+          row('שם קובץ HTML', data.htmlFileName) +
+          row('שם קובץ PDF', data.pdfFileName) +
+          actions(data) +
         '</div>';
     }
 
