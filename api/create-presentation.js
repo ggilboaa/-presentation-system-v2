@@ -46,8 +46,8 @@ export default async function handler(req, res) {
     const origin = detectOrigin(req);
     const slug = slugifyTopic(built.topic) || "presentation";
 
-    const presentationUrl = deployPublic && origin ? `${origin}/api/presentation?d=${d}` : null;
-    const pdfUrl = exportPdf && origin ? `${origin}/api/presentation?d=${d}&print=1` : null;
+    const presentationUrl = origin ? `${origin}/api/presentation?d=${d}` : null;
+    const pdfUrl = origin ? `${origin}/api/presentation?d=${d}&print=1` : null;
 
     return res.status(200).json({
       ok: true,
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       coreInsight: built.coreInsight,
       slideCount: built.slideCount,
       htmlFileName: `presentation_${slug}.html`,
-      pdfFileName: exportPdf ? `presentation_${slug}.pdf` : null,
+      pdfFileName: `presentation_${slug}.pdf`,
       presentationUrl,
       pdfUrl,
       requestedOptions: { exportPdf, deployPublic }

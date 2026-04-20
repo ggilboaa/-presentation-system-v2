@@ -135,7 +135,7 @@
       gap: 10px;
       margin-top: 14px;
     }
-    .actions a {
+    .actions .btn {
       flex: 1 1 140px;
       text-align: center;
       padding: 14px 16px;
@@ -147,9 +147,35 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      border: 0;
+      cursor: pointer;
+      font-family: inherit;
     }
-    .actions a.primary { background: var(--navy); color: #fff; }
-    .actions a.secondary { background: var(--mint); color: var(--navy); }
+    .actions .primary { background: var(--navy); color: #fff; }
+    .actions .secondary { background: var(--mint); color: var(--navy); }
+    .actions .ghost {
+      background: #fff;
+      color: var(--navy);
+      border: 1px solid var(--border);
+    }
+    .link-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #f4f6f8;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      word-break: break-all;
+      user-select: all;
+      -webkit-user-select: all;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .copied {
+      background: var(--success) !important;
+      color: #fff !important;
+    }
     pre {
       white-space: pre-wrap;
       word-break: break-word;
@@ -223,22 +249,63 @@
       return '<div class="row"><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(value) + '</span></div>';
     }
 
-    function actions(data) {
-      const items = [];
+    function buildActions(data) {
+      const parts = [];
       if (data.presentationUrl) {
-        items.push(
-          '<a class="primary" href="' + escapeHtml(data.presentationUrl) +
-          '" target="_blank" rel="noopener">פתח מצגת</a>'
+        parts.push(
+          '<div class="actions">' +
+            '<a class="btn primary" href="' + escapeHtml(data.presentationUrl) +
+              '" target="_blank" rel="noopener">פתח מצגת</a>' +
+            '<button type="button" class="btn ghost" data-copy="' +
+              escapeHtml(data.presentationUrl) + '">העתק קישור</button>' +
+          '</div>' +
+          '<div class="link-box">' + escapeHtml(data.presentationUrl) + '</div>'
         );
       }
       if (data.pdfUrl) {
-        items.push(
-          '<a class="secondary" href="' + escapeHtml(data.pdfUrl) +
-          '" target="_blank" rel="noopener">הורד PDF</a>'
+        parts.push(
+          '<div class="actions">' +
+            '<a class="btn secondary" href="' + escapeHtml(data.pdfUrl) +
+              '" target="_blank" rel="noopener">הורד PDF</a>' +
+          '</div>'
         );
       }
-      return items.length ? '<div class="actions">' + items.join('') + '</div>' : '';
+      return parts.join('');
     }
+
+    async function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (_) {}
+      }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    output.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-copy]');
+      if (!btn) return;
+      const text = btn.getAttribute('data-copy');
+      const ok = await copyToClipboard(text);
+      const original = btn.textContent;
+      btn.textContent = ok ? 'הועתק ✓' : 'העתקה נכשלה';
+      btn.classList.toggle('copied', ok);
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1600);
+    });
 
     function showResult(data) {
       output.innerHTML =
@@ -249,7 +316,7 @@
           row('תובנה מרכזית', data.coreInsight) +
           row('שם קובץ HTML', data.htmlFileName) +
           row('שם קובץ PDF', data.pdfFileName) +
-          actions(data) +
+          buildActions(data) +
         '</div>';
     }
 
