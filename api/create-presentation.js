@@ -47,10 +47,23 @@ export default async function handler(req, res) {
     return res.status(200).json(result);
   } catch (error) {
     console.error("[create-presentation] error:", error);
+    const msg = error?.message || String(error);
+    const isTimeout =
+      error?.name === "APIConnectionTimeoutError" ||
+      /timeout|timed out/i.test(msg);
+    const isOverloaded = error?.status === 529 || /overloaded/i.test(msg);
+
+    if (isTimeout || isOverloaded) {
+      return res.status(503).json({
+        ok: false,
+        error: "ה-AI לא הגיב בזמן. אנא נסה שוב.",
+        details: msg
+      });
+    }
     return res.status(500).json({
       ok: false,
       error: "Failed to run presentation pipeline.",
-      details: error?.message || String(error)
+      details: msg
     });
   }
 }
