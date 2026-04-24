@@ -329,6 +329,23 @@
         '</div>';
     }
 
+    function showLoading() {
+      output.innerHTML =
+        '<div class="result" id="loading">' +
+          '<h2 style="color:var(--navy)">יוצר מצגת…</h2>' +
+          '<div>התהליך כולל שני שלבי AI (content + design) ויכול לקחת 20–40 שניות.</div>' +
+          '<div class="row"><strong>זמן שחלף</strong><span id="elapsed">0 שניות</span></div>' +
+        '</div>';
+      const started = Date.now();
+      const el = document.getElementById('elapsed');
+      const timer = setInterval(() => {
+        if (!document.getElementById('loading')) { clearInterval(timer); return; }
+        const s = Math.floor((Date.now() - started) / 1000);
+        el.textContent = s + ' שניות';
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const topic = document.getElementById('topic').value.trim();
@@ -350,13 +367,17 @@
       submitBtn.disabled = true;
       const originalLabel = submitBtn.textContent;
       submitBtn.textContent = 'יוצר…';
-      output.innerHTML = '';
+      const stopLoading = showLoading();
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 75000);
 
       try {
         const res = await fetch('/api/create-presentation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
+          signal: controller.signal,
         });
         const data = await res.json().catch(() => null);
         if (!res.ok || !data || data.ok === false) {
@@ -365,8 +386,14 @@
         }
         showResult(data);
       } catch (err) {
-        showError('נכשלה שליחת הבקשה', err && err.message);
+        if (err && err.name === 'AbortError') {
+          showError('הבקשה חרגה מ-75 שניות', 'ה-AI לוקח יותר מדי זמן. נסה שוב, או נסה נושא פשוט יותר.');
+        } else {
+          showError('נכשלה שליחת הבקשה', err && err.message);
+        }
       } finally {
+        clearTimeout(timeoutId);
+        stopLoading();
         submitBtn.disabled = false;
         submitBtn.textContent = originalLabel;
       }
